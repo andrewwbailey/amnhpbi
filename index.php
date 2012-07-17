@@ -5,14 +5,12 @@ echo '<h1>Planetary Biodiversity Inventory</h1><br />';
 
 require_once ('../../connect_pbilocality.php');
 
-
-echo 'These are words!';
 // Prepare the query:
 $stmt = $mysqli->prepare("SELECT localityuid, localitystr, dlat, dlong, nnotes, sitename, createdate, updatedate, createdby, updatedby FROM locality LIMIT 50");
 
 if (!$stmt->execute())
   echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-
+echo 'These are words!';
 $res = $stmt->get_result();
 $row = $res->fetch_assoc();
 	
