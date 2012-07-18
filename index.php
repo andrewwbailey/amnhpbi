@@ -3,19 +3,20 @@ $page_title = 'Planetary Biodiversity Inventory';
 include ('inc/pbi_head.html');
 echo '<h1>Planetary Biodiversity Inventory</h1><br />';
 
-require_once ('../../connect_pbilocality.php');
-
+require_once("../../../connect_pbilocality.php");
 // Prepare the query:
-$stmt = $mysqli->prepare("SELECT localityuid, localitystr, dlat, dlong, nnotes, sitename, createdate, updatedate, createdby, updatedby FROM locality LIMIT 50");
+$stmt = $mysqli->prepare("SELECT localityuid, localitystr, dlat, dlong, nnotes, sitename, createdate, updatedate, createdby, updatedby FROM Locality LIMIT 50");
 
 if (!$stmt->execute())
   echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-echo 'These are words!';
-$res = $stmt->get_result();
-$row = $res->fetch_assoc();
-	
-//printf("id = %s (%s)\n", $row['id'], gettype($row['id']));
-//printf("label = %s (%s)\n", $row['label'], gettype($row['label']
+
+$stmt->store_result();
+$stmt->bind_result($col1,$col2,$col3,$col4,$col5,$col6,$col7,$col8,$col9,$col10);
+
+
+echo "Number of rows: " . $stmt->num_rows . "<br />";
+echo "Number of fields: " . $stmt->field_count . "<br />";
+  
 echo '<table align="center" cellspacing="0" cellpadding="5" width="90%">
 <tr>
 	<td align="left" width="35"><b>Locality ID</b></td>
@@ -30,30 +31,26 @@ echo '<table align="center" cellspacing="0" cellpadding="5" width="90%">
 	<td align="left" width="35"><b>Updated By</b></td>
 </tr>';
 
-$bg = '#eeeeee'; // Set the initial background color.
-
-while ($row = mysqli_fetch_array($r, MYSQLI_ASSOC)) {
-
-	$bg = ($bg=='#eeeeee' ? '#ffffff' : '#eeeeee'); // Switch the background color.
-	
-	echo '<tr bgcolor="' . $bg . '">
-		<td align="left">' . $row['localityuid'] . '</td> 
-		<td align="left">' . $row['localitystr'] . '</td>
-		<td align="left">' . $row['dlat'] . '</td>
-		<td align="left">' . $row['dlong'] . '</td>
-		<td align="left">' . $row['nnotes'] . '</td>
-		<td align="left">' . $row['sitename'] . '</td>
-		<td align="left">' . $row['createdate'] . '</td>
-		<td align="left">' . $row['updatedate'] . '</td>
-		<td align="left">' . $row['createdby'] . '</td>
-		<td align="left">' . $row['updatedby'] . '</td>
+while ($stmt->fetch()) {
+	echo '<tr>
+		<td align="left">' . $col1 . '</td> 
+		<td align="left">' . $col2 . '</td>
+		<td align="left">' . $col3 . '</td>
+		<td align="left">' . $col4. '</td>
+		<td align="left">' . $col5 . '</td>
+		<td align="left">' . $col6. '</td>
+		<td align="left">' . $col7 . '</td>
+		<td align="left">' . $col8 . '</td>
+		<td align="left">' . $col9 . '</td>
+		<td align="left">' . $col10 . '</td>
 	</tr>';
+}
+
+$stmt->close();
+$stmt->free_result();
 	
-} // End of WHILE loop.
-
-
-mysqli_free_result ($r);
-mysqli_close($dbc);
+//mysqli_free_result ($r);
+//mysqli_close($dbc);
 
 include ('inc/pbi_foot.html');
 ?>
