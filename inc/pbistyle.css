@@ -1,0 +1,24 @@
+﻿/*
+ *	Author: Andrew Bailey
+ *	Date Created: 8/1/2012
+ *	Project: AMNH - PBI Localities
+ *
+ */
+
+ /* top elements */
+*{
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+	outline: 0px;
+}
+
+header {
+	background-color: rgb(111,240,104);
+	font-family: calibri;
+	padding-left: 10px;
+	padding-top: 10px;
+	height: 50px;
+	text-align: left; 
+	
+}
