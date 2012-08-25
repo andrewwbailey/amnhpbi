@@ -21,3 +21,9 @@ header {
 	text-align: left; 
 	
 }
+
+table {
+	font-family: calibri;
+	border: 1px;
+	border-color: blue;
+}

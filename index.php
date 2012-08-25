@@ -11,7 +11,7 @@ echo "<header>
 
 require_once("../../../connect_pbilocality.php");
 
-$display = 250;
+$display = 100;
 
 $stmtCount = $mysqli->prepare("SELECT COUNT(localityuid) FROM Locality");
 
@@ -21,14 +21,10 @@ if (!$stmtCount->execute()) {
 
 $stmtCount->bind_result($recCount);
 
-while($stmtCount->fetch()){
-	echo $recCount . "<p/>";
-}
+$stmtCount->fetch();
 $stmtCount->close();
 
 $pages = ceil($recCount/$display);
-
-echo 'Pages: ' . $pages . '<br />';
 
 $p = 0;
 
@@ -40,10 +36,6 @@ if (isset($_GET['p'])) {
 	$ubound = $display;
 	$lbound = 0;
 }
-echo 'Page Click: ' . $p . '<br />';
-echo 'Ubound: ' . $ubound . '<br />';
-echo 'Lbound: ' . $lbound;
-
 echo '<div class="datagrid">';
 // Prepare the query:
 $stmtMain = $mysqli->prepare("SELECT localityuid, localitystr,
