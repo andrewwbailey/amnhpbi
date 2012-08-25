@@ -1,15 +1,17 @@
 ﻿<?php
 $page_title = 'PBI - AMNH';
+
 include ('inc/pbi_head.html');
 
 echo "<header>
-	<h1>Planetary Biodiversity Inventory for Plant Bugs</h1> <br />
+	<h1>Planetary Biodiversity Inventory for Plant Bugs(@AMNH)</h1> <br />
+	<h2>Data Clean-Up Project</h2>
 	</header>";
 
 
 require_once("../../../connect_pbilocality.php");
 
-$display = 200;
+$display = 250;
 
 $stmtCount = $mysqli->prepare("SELECT COUNT(localityuid) FROM Locality");
 
@@ -26,10 +28,27 @@ $stmtCount->close();
 
 $pages = ceil($recCount/$display);
 
-echo "Pages: " . $pages;
+echo 'Pages: ' . $pages . '<br />';
 
+$p = 0;
+
+if (isset($_GET['p'])) {
+	$p = $_GET['p'];
+	$ubound = $display * $p;
+	$lbound = $display * ($p - 1);
+}else{
+	$ubound = $display;
+	$lbound = 0;
+}
+echo 'Page Click: ' . $p . '<br />';
+echo 'Ubound: ' . $ubound . '<br />';
+echo 'Lbound: ' . $lbound;
+
+echo '<div class="datagrid">';
 // Prepare the query:
-$stmtMain = $mysqli->prepare("SELECT localityuid, localitystr, dlat, dlong, nnotes, sitename, createdate, updatedate, createdby, updatedby FROM Locality LIMIT 200");
+$stmtMain = $mysqli->prepare("SELECT localityuid, localitystr,
+ dlat, dlong, nnotes, sitename, createdate, updatedate, createdby, 
+ updatedby FROM Locality LIMIT " . $lbound . "," . $ubound);
 
 if (!$stmtMain->execute()) {
 	echo "Execute failed: (" . $stmtMain->errno . ") " . $stmtMain->error;
@@ -65,6 +84,14 @@ while ($stmtMain->fetch()) {
 		<td align="left">' . $col10 . '</td>
 	</tr>';
 }
+
+echo '</table></div><div class="page-select">';
+
+for($i = 1; $i <= $pages; $i++){
+	echo '<a href="?p=' . $i . '">[' . $i . '] </a>';
+}
+
+echo '</div>';
 
 $stmtMain->close();
 
